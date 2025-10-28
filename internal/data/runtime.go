@@ -11,6 +11,7 @@ var ErrInvalidRuntimeFormat = errors.New("invalid runtime format")
 
 type Runtime int32
 
+// convert Go type to JSON
 func (r Runtime) MarshalJSON() ([]byte, error) {
 	if r < 0 {
 		return nil, ErrInvalidRuntimeFormat
@@ -27,6 +28,7 @@ func (r Runtime) MarshalJSON() ([]byte, error) {
 	return []byte(quotedJSONValue), nil
 }
 
+// convert JSON to Go type
 func (r *Runtime) UnmarshalJSON(jsonValue []byte) error {
 	unquotedJSONValue, err := strconv.Unquote(string(jsonValue))
 	if err != nil {
@@ -39,7 +41,7 @@ func (r *Runtime) UnmarshalJSON(jsonValue []byte) error {
 	}
 
 	inte, err := strconv.ParseInt(parts[0], 10, 32)
-	if err != nil || inte < 0 {
+	if err != nil {
 		return ErrInvalidRuntimeFormat
 	}
 
